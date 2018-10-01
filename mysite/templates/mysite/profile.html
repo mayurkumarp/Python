@@ -1,0 +1,159 @@
+{% load static %}
+<title>JWT | Profile</title>
+{% include 'mysite/style.html' %}
+{% include 'mysite/nav.html' %}
+<div class="container">
+    <div class="jumbotron my-4">
+        <div class="row">
+            <div class="col-md-2 col-sm-12 col-xs-12 col-lg-2">
+                <img src="{% static 'onetech/images/user4.png' %}" class="user-img">
+            </div>
+            <div class="col-md-10 col-sm-12 col-xs-12 col-lg-10">
+                <div class="social-app">
+                    <p><a href=""><img src="{% static 'onetech/images/facebook.ico' %}" class="img-w-h"></a></p>
+                    <p><a href=""><img src="{% static 'onetech/images/linkdin.jpg' %}" class="img-w-h"></a></p>
+                    <p><a href=""><img src="{% static 'onetech/images/twitter.png' %}" class="img-w-h"></a></p>
+                    <p><a href=""><img src="{% static 'onetech/images/google.png' %}" class="img-w-h"></a></p>
+                </div>
+                <p class="m-b-1p"><span class="first_last_name">{{user.first_name | title }} {{ user.last_name | title }}</span>
+                <p class="c-007bff94">Member last {{user.last_login}}</p>
+                <p><img src="{% static 'onetech/images/email3.png' %}" class="img-w-h"><span
+                        class="p-2">{{user.email}}</span></p>
+                <p><img src="{% static 'onetech/images/phone3.png' %}" class="img-w-h"><span class="p-2">{{user.userprofile.phone}}</span>
+                </p>
+            </div>
+        </div>
+        <p class="lead m-t-2">Be silent and let your success shout.</p>
+        <p class="lead m-t-2"><strong>Date:</strong>{% now "jS F Y" %}, <strong>To Do:</strong> Be Happy!</p>
+    </div>
+    <div class="">
+        <h2 class="mt-4 mb-3">Edit Profile</h2>
+        <hr>
+        <div class="row">
+            <div class="col-lg-8 mb-4">
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-success  alert-dismissible w-30 m-left-35 m-top-1">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Success !</strong> {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                <form method="POST" id="edit_profile" novalidate>
+                    {% csrf_token %}
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            <label>Userame:</label>
+                            <input type="text" name="username" autofocus="" required="" id="id_username"
+                                   class="form-control" value="{{ user.username }}">
+                            {{ form.username.errors }}
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            <label>First Name:</label>
+                            <input type="text" class="form-control" id="id_first_name" name="first_name"
+                                   value="{{ user.first_name }}">
+                            {{ form.first_name.errors }}
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            <label>Last Name:</label>
+                            <input type="text" name="last_name" id="id_last_name" class="form-control"
+                                   value="{{ user.last_name }}">
+                            {{ form.last_name.errors }}
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            <label>Phone Number:</label>
+                            <input type="tel" class="form-control" name="phone" id="id_phone"
+                                   value="{{ user.userprofile.phone }}">
+                            {{ form.phone.errors }}
+                        </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            <label>Email Address:</label>
+                            <input type="text" class="form-control" name="email" id="id_email" value="{{ user.email }}">
+                            {{ form.email.errors }}
+                        </div>
+                    </div>
+                    <div id="success"></div>
+                    <div class="">
+                        <button class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'mysite/footer.html' %}
+{% include 'mysite/script.html' %}
+<script type="text/javascript">
+$(document).ready(function () {
+        $('#edit_profile').validate({
+            rules: {
+                username :{
+                    required:true,
+                    maxlength: 12,
+                    remote: {
+                        url: "username_validation?id={{user.id}}",
+                        type: "GET"
+                 }
+                },
+                first_name : {
+                    required: true,
+                    maxlength: 30,
+                    lettersonly: true
+                },
+                last_name : {
+                    required: true,
+                    maxlength: 30,
+                    lettersonly: true
+                },
+                email : {
+                    required: true,
+                    maxlength: 50,
+                    email:true,
+                    remote: {
+                        url: "email_validation?id={{user.id}}",
+                        type: "GET"
+                 }
+                },
+                phone : {
+                    required: true,
+                    digits: true,
+                     maxlength: 10,
+                     minlength: 10,
+                     remote: {
+                        url: "phone_validation?id={{user.id}}",
+                        type: "GET"
+                 }
+
+                },
+            },
+            messages: {
+                 username: {
+                     required: "Please enter your username.",
+                     remote: "username already in use!"
+                },
+                first_name: "Please enter your first name",
+                last_name: "Please enter last name",
+                email: {
+                     required: "Please enter your email address.",
+                     email: "Please enter a valid email address.",
+                        remote: "Email already in use!"
+                },
+                phone: {
+                     required: "Please enter your phone number.",
+                     remote: "phone number already in use!"
+                },
+            },
+            errorClass: "my-error-class",
+            validClass: "my-valid-class"
+        });
+    });
+
+</script>

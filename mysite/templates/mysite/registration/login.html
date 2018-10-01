@@ -1,0 +1,73 @@
+{% load static %}
+<title>JWT | Login</title>
+{% include 'mysite/style.html' %}
+{% include 'mysite/nav.html' %}
+<div class="container">
+    <h1 class="mt-4 mb-3">Login</h1>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'index' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Login</li>
+    </ol>
+
+    <div class="row">
+        <div class="col-lg-8 mb-4">
+
+            {% if user.is_authenticated %}
+            <div class="alert alert-warning  alert-dismissible w-30 m-left-35 m-top-1">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Warning!</strong> Your account doesn't have access to this page. To proceed, Please login with
+                an
+                account that has access.
+            </div>
+            {% else %}
+            {% endif %}
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {% if message.tags == 'success' %}
+                <strong>Success! </strong>{{ message }}
+                {% elif message.tags == 'warning' %}
+                <strong>Warning! </strong>{{ message }}
+                {% endif %}
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            {% if error %}
+            <div class="alert alert-danger  alert-dismissible w-30 m-left-35 m-top-1">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Error !</strong> {{error}}
+            </div>
+            {% endif %}
+
+            <form action="/login/?next={{next}}" method="post" id="login-form" novalidate>
+                {% csrf_token %}
+                <div class="control-group form-group">
+                    <div class="controls">
+                        <label>Userame:</label>
+                        <input type="text" class="form-control" id="id_username" name="username" required
+                               data-validation-required-message="Please enter your username.">
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="control-group form-group">
+                    <div class="controls">
+                        <label>Password:</label>
+                        <input type="password" class="form-control" id="id_password" name="password" required
+                               data-validation-required-message="Please enter your password number.">
+                    </div>
+                </div>
+                <div id="success"></div>
+                <button type="submit" class="btn btn-primary" id="login">Login</button>
+            </form>
+            <p><a href="{% url 'password_reset' %}" class="pull-left">Forget password?</a></p>
+            <p><a href="{% url 'signup' %}" class="pull-right">Create an account</a></p>
+        </div>
+    </div>
+</div>
+{% include 'mysite/footer.html' %}
+{% include 'mysite/script.html' %}

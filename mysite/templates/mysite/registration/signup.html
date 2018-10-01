@@ -1,0 +1,72 @@
+<title>JWT | signup</title>
+{% include 'mysite/style.html' %}
+{% include 'mysite/nav.html' %}
+<div class="container">
+      <h1 class="mt-4 mb-3">Register</h1>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'index' %}">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Signup</li>
+      </ol>
+      <div class="row">
+        <div class="col-lg-8 mb-4">
+          <form method="POST" id="signup-form" novalidate>
+            {% csrf_token %}
+            <div class="control-group form-group">
+              <div class="controls">
+                <label>Userame:</label>
+                <input type="text" name="username" autofocus="" required="" id="id_username" class="form-control">
+                {{ form.username.errors }}
+              </div>
+            </div>
+            <div class="control-group form-group">
+              <div class="controls">
+                <label>First Name:</label>
+                <input type="text" class="form-control" id="id_first_name" name="first_name">
+                {{ form.first_name.errors }}
+              </div>
+            </div>
+            <div class="control-group form-group">
+              <div class="controls">
+                <label>Last Name:</label>
+                <input type="text" name="last_name" id="id_last_name" class="form-control">
+                {{ form.last_name.errors }}
+              </div>
+            </div>
+            <div class="control-group form-group">
+              <div class="controls">
+                <label>Phone Number:</label>
+                <input type="tel" class="form-control" name="phone" id="id_phone">
+                {{ form.phone.errors }}
+              </div>
+            </div>
+            <div class="control-group form-group">
+              <div class="controls">
+                <label>Email Address:</label>
+                <input type="text" class="form-control" name="email" id="id_email">
+                {{ form.email.errors }}
+              </div>
+            </div>
+            <div class="control-group form-group">
+              <div class="controls">
+                <label>Password</label>
+                <input type="password" class="form-control" name="password1" id="id_password1">
+                {{ form.password1.errors }}
+              </div>
+            </div>
+            <div class="control-group form-group">
+              <div class="controls">
+                <label>Confirm password:</label>
+                <input type="password" class="form-control" id="id_password2" name="password2">
+                {{ form.password2.errors }}
+              </div>
+            </div>
+            <div id="success"></div>
+            <button class="btn btn-primary">Register</button>
+          </form>
+        </div>
+    </div>
+</div>
+{% include 'mysite/footer.html' %}
+{% include 'mysite/script.html' %}
